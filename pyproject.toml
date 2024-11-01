@@ -1,5 +1,5 @@
 [project]
-name = "nicetypes"
+name = "ricetypes"
 authors = [ {name = "Maxwell Gisborne", email = "maxwell.gisborne@plymouth.ac.uk"}, ]
 version = "0.1.0"
 readme = 'readme.md'
@@ -10,3 +10,6 @@ requires-python = ">= 3.11"
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = 'https://github.com/maxwell-gisborne/nicetypes'
