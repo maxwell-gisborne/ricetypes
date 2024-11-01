@@ -27,9 +27,13 @@ class Option:
             return f'Some({self.value})'
         return 'Nothing'
 
+    def bind(self, fun, *args, **kwargs):
+        if not self.something:
+            return self
+        return fun(self.value, *args, **kwargs)
+
 
 Option.Nothing = Option.Nothing()
-
 
 class Result:
     error: bool
@@ -52,6 +56,11 @@ class Result:
             return self
         return Result.Ok(fun(self._value, *args, **kwargs))
 
+    def bind(self, fun, *args, **kwargs):
+        if self.error:
+            return self
+        return fun(self._value, *args, **kwargs)
+
     def maperr(self, fun, *args, **kwargs):
         if not self.error:
             return self
@@ -69,6 +78,11 @@ class Result:
             result = Result.Ok(self._value)
         result.Exception = exp
         return result
+
+    def or_else(self, default):
+        if self.error:
+            return default
+        return self._value
 
     def __repr__(self):
         if self.error:
@@ -150,8 +164,11 @@ class Struct_Variant:
         kw_setters = '\n    '.join([f'variant.{arg} = {arg}' for arg, type in self.kwargs.items()])
         kw_setters += '\n    ' + 'variant.dict = {' + ', '.join([f'"{arg}": {arg}' for arg in self.kwargs]) + '}'
 
-        varlist_quote = [tvar[0] for tvar in tuple_vars] + list(self.kwargs)
-        varlist = '[' + ','.join([v for v in varlist_quote]) + ']'
+        t_varlist_quote = [tvar[0] for tvar in tuple_vars]
+        k_varlist_quote = list(self.kwargs)
+
+        t_varlist = '[' + ','.join([v for v in t_varlist_quote]) + ']'
+        k_varlist = '[' + ','.join([v for v in k_varlist_quote]) + ']'
 
         sig = f'{tuple_args}{tp_kw_seperator}{kw_args}'
 
@@ -169,10 +186,13 @@ def constructor({sig}) -> cls:
     variant._vtype = Struct_Variant
     variant._vid = vid
 
-    varlist_quote = {varlist_quote}
-    varlist = {varlist}
+    k_varlist_quote = {k_varlist_quote}
+    k_varlist = {k_varlist}
+    t_varlist = {t_varlist}
 
-    variant._svariant_sig = ', '.join(str(k) + ' = ' + str(v) for k, v in zip(varlist_quote, varlist))
+    variant._svariant_sig = ', '.join(str(v) for v in t_varlist)
+    variant._svariant_sig += "{tp_kw_seperator}"
+    variant._svariant_sig += ', '.join(str(k) + ' = ' + str(v) for k, v in zip(k_varlist_quote, k_varlist))
     {tuple_setters}
     {kw_setters}
     return variant
