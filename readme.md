@@ -21,7 +21,7 @@ class Color:
     Blue:  Scailer_Variant
     Green: Scailer_Variant
 
-    RGB: Struct_Variant(int, int, int)
+    RGB: Struct_Variant(int, int, int, alpha=float)
 
 
 r = Color.Red
@@ -29,8 +29,13 @@ b = Color.Blue
 g = Color.Green
 
 
-whilte = Color.RGB(100,100,100)
+whilte = Color.RGB(100,100,100, alpha=.1)
 
+print(white.alpha)
+print(white._0, white._1, white_2)
+
+print(white.tuple)
+print(white.dict)
 
 match r:
     case Color.Red:
