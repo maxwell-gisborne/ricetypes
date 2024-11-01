@@ -13,13 +13,13 @@ pip install ricetypes
 I have implemented something approximating rust enums.
 
 ``` python
-from ricetypes import Enum, Scailer_Variant, Struct_Variant
+from ricetypes import Enum, Scalar_Variant, Struct_Variant
 
 @Enum
 class Color:
-    Red:   Scailer_Variant
-    Blue:  Scailer_Variant
-    Green: Scailer_Variant
+    Red:   Scalar_Variant
+    Blue:  Scalar_Variant
+    Green: Scalar_Variant
 
     RGB: Struct_Variant(int, int, int, alpha=float)
 

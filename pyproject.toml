@@ -1,11 +1,12 @@
 [project]
 name = "ricetypes"
 authors = [ {name = "Maxwell Gisborne", email = "maxwell.gisborne@plymouth.ac.uk"}, ]
-version = "0.1.0"
+version = "0.1.2"
 readme = 'readme.md'
 license = {text = 'MIT License'}
 keywords = ['typing', 'result', 'option', 'enum']
-requires-python = ">= 3.11"
+requires-python = ">= 3.9"
+description = 'Some nice type like things'
 
 [build-system]
 requires = ["setuptools"]
