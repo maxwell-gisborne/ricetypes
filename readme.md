@@ -1,13 +1,19 @@
-# nicetypes
+# ricetypes
 
 This is a little library that defines some nice type constructs that I like to have.
+
+## Install
+
+```sh
+pip install ricetypes
+```
 
 
 ### Result 
 
 It includes the Result type:
 ``` python
-from nicetypes import Result
+from ricetypes import Result
 
 r = Result.Ok(10)
 
@@ -45,7 +51,7 @@ Result.Ok(0).bind(foo, 10).bind(foo,30).bind(foo,20).or_else(-1)
 
 ### Option
 ``` python
-from nicetypes import Option
+from ricetypes import Option
 op = Option.Some('value')
 
 if op.something:
@@ -65,7 +71,7 @@ op.or_else('hi')
 I have implemented something approximating rust enums.
 
 ``` python
-from nicetypes import Enum, Scailer_Variant, Struct_Variant
+from ricetypes import Enum, Scailer_Variant, Struct_Variant
 
 @Enum
 class Color:
