@@ -8,6 +8,41 @@ This is a little library that defines some nice type constructs that I like to h
 pip install ricetypes
 ```
 
+### Enums (Discriminated Unions)
+
+I have implemented something approximating rust enums.
+
+``` python
+from ricetypes import Enum, Scailer_Variant, Struct_Variant
+
+@Enum
+class Color:
+    Red:   Scailer_Variant
+    Blue:  Scailer_Variant
+    Green: Scailer_Variant
+
+    RGB: Struct_Variant(int, int, int)
+
+
+r = Color.Red
+b = Color.Blue
+g = Color.Green
+
+
+whilte = Color.RGB(100,100,100)
+
+
+match r:
+    case Color.Red:
+        print('red')
+    case Color.Blue:
+        print('blue')
+    case Color.Green:
+        print('green')
+
+# unfortunatly you cant use Struct_Variants in a match statment
+
+```
 
 ### Result 
 
@@ -66,38 +101,3 @@ op.or_else('hi')
 ```
 
 
-### Enums (Discriminated Unions)
-
-I have implemented something approximating rust enums.
-
-``` python
-from ricetypes import Enum, Scailer_Variant, Struct_Variant
-
-@Enum
-class Color:
-    Red:   Scailer_Variant
-    Blue:  Scailer_Variant
-    Green: Scailer_Variant
-
-    RGB: Struct_Variant(int, int, int)
-
-
-r = Color.Red
-b = Color.Blue
-g = Color.Green
-
-
-whilte = Color.RGB(100,100,100)
-
-
-match r:
-    case Color.Red:
-        print('red')
-    case Color.Blue:
-        print('blue')
-    case Color.Green:
-        print('green')
-
-# unfortunatly you cant use Struct_Variants in a match statment
-
-```
