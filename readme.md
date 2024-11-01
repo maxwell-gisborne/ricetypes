@@ -1,7 +1,5 @@
 # nicetypes
 
-_warnning: I wrote this markdown document directly and have not actlualy run the code examples, so there may be typeos, but the underlying features do work_
-
 This is a little library that defines some nice type constructs that I like to have.
 
 
@@ -62,9 +60,9 @@ op.or_else('hi')
 ```
 
 
-### Enums (Descriminated Unions)
+### Enums (Discriminated Unions)
 
-I have implemented a something approximating rust enums.
+I have implemented something approximating rust enums.
 
 ``` python
 from nicetypes import Enum, Scailer_Variant, Struct_Variant
