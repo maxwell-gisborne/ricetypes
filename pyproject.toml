@@ -1,0 +1,12 @@
+[project]
+name = "nicetypes"
+authors = [ {name = "Maxwell Gisborne", email = "maxwell.gisborne@plymouth.ac.uk"}, ]
+version = "0.1.0"
+readme = 'readme.md'
+license = {text = 'MIT License'}
+keywords = ['typing', 'result', 'option', 'enum']
+requires-python = ">= 3.11"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
