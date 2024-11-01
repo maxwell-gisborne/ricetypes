@@ -202,13 +202,3 @@ def constructor({sig}) -> cls:
         constructor = exec_locals['constructor']
         constructor.__doc__ = f'Constructor for {cls.__qualname__}.{name}({sig})'
         return constructor
-
-
-@Enum
-class Color:
-    Red: Scailer_Variant
-    Green: Scailer_Variant = 10
-    Blue: Scailer_Variant
-
-    RGB: Struct_Variant(int, int, int)
-    RGBA: Struct_Variant(int, int, int, alpha = float)
