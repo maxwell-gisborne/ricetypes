@@ -106,6 +106,8 @@ def Enum(cls):
                         pass
                     case (int(given_id), str(given_str)) | (str(given_str), int(given_id)):
                         pass
+                    case _:
+                        raise Exception('Unknown data in Scalar Variant Deffinition')
 
                 if given_id is not None:
                     assert given_id >= variants_count, (name, given_id, variants_count)
