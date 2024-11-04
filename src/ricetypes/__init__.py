@@ -35,6 +35,7 @@ class Option:
 
 Option.Nothing = Option.Nothing()
 
+
 class Result:
     error: bool
     Exception = Exception
@@ -95,13 +96,25 @@ def Enum(cls):
     for name, given_type in cls.__annotations__.items():
 
         if given_type is Scalar_Variant:
-            if given_id := cls.__dict__.get(name):
-                assert given_id >= variants_count, (name, given_id, variants_count)
-                variants_count = given_id
+            given_id = None
+            given_str = None
+            if data := cls.__dict__.get(name):
+                match data:
+                    case int(given_id):
+                        pass
+                    case str(given_str):
+                        pass
+                    case (int(given_id), str(given_str)) | (str(given_str), int(given_id)):
+                        pass
+
+                if given_id is not None:
+                    assert given_id >= variants_count, (name, given_id, variants_count)
+                    variants_count = given_id
 
             variant = object.__new__(cls)
-            variant._vid = variants_count
             variant._name = name
+            variant._str = name if given_str is None else given_str
+            variant._vid = variants_count if given_id is None else given_id
 
             variant._vtype = Scalar_Variant
             setattr(cls, name, variant)
@@ -117,28 +130,38 @@ def Enum(cls):
 
             variants_count += 1
 
-    def display(variant) -> str:
-        if variant._vtype is Scalar_Variant:
-            return f'{cls.__qualname__}.{variant._name}'
-        if variant._vtype is Struct_Variant:
-            return f'{cls.__qualname__}.{variant._name}({variant._svariant_sig})'
-        raise Exception('unknown variant type')
-    setattr(cls, '__repr__', display)
+    if cls.__dict__.get('__int__') is None:
+        def to_int(variant) -> int:
+            return variant._vid
+        setattr(cls, '__int__', to_int)
 
-    def to_string(variant) -> str:
-        if variant._vtype is Scalar_Variant:
-            return variant._name
-        raise Exception('unknown variant type')
-    setattr(cls, '__str__', to_string)
+    if cls.__dict__.get('__repr__') is None:
+        def display(variant) -> str:
+            if variant._vtype is Scalar_Variant:
+                return f'{cls.__qualname__}.{variant._name}'
+            if variant._vtype is Struct_Variant:
+                return f'{cls.__qualname__}.{variant._name}({variant._svariant_sig})'
+            raise Exception('unknown variant type')
+        setattr(cls, '__repr__', display)
 
-    def eq(variant1, variant2) -> bool:
-        if variant1._vtype != variant2._vtype:
-            return False
+    if cls.__dict__.get('__str__') is None:
+        def to_string(variant) -> str:
+            if variant._vtype is Scalar_Variant:
+                return variant._str
+            raise Exception('unknown variant type')
+        setattr(cls, '__str__', to_string)
 
-        if variant1._vtype is Scalar_Variant:
-            return variant1._vid == variant2._vid
+    if cls.__dict__.get('__eq__') is None:
+        def eq(variant1, variant2) -> bool:
+            if variant1._vtype != variant2._vtype:
+                return False
 
-        raise Exception('unknown variant type')
+            if variant1._vtype is Scalar_Variant:
+                return variant1._vid == variant2._vid
+
+            raise Exception('unknown variant type')
+        setattr(cls, '__eq__', eq)
+
 
     return cls
 
