@@ -94,7 +94,7 @@ def Enum(cls):
     variants_count = 0
     for name, given_type in cls.__annotations__.items():
 
-        if given_type is Scailer_Variant:
+        if given_type is Scalar_Variant:
             if given_id := cls.__dict__.get(name):
                 assert given_id >= variants_count, (name, given_id, variants_count)
                 variants_count = given_id
@@ -103,7 +103,7 @@ def Enum(cls):
             variant._vid = variants_count
             variant._name = name
 
-            variant._vtype = Scailer_Variant
+            variant._vtype = Scalar_Variant
             setattr(cls, name, variant)
             variants_count += 1
 
@@ -118,7 +118,7 @@ def Enum(cls):
             variants_count += 1
 
     def display(variant) -> str:
-        if variant._vtype is Scailer_Variant:
+        if variant._vtype is Scalar_Variant:
             return f'{cls.__qualname__}.{variant._name}'
         if variant._vtype is Struct_Variant:
             return f'{cls.__qualname__}.{variant._name}({variant._svariant_sig})'
@@ -126,7 +126,7 @@ def Enum(cls):
     setattr(cls, '__repr__', display)
 
     def to_string(variant) -> str:
-        if variant._vtype is Scailer_Variant:
+        if variant._vtype is Scalar_Variant:
             return variant._name
         raise Exception('unknown variant type')
     setattr(cls, '__str__', to_string)
@@ -135,7 +135,7 @@ def Enum(cls):
         if variant1._vtype != variant2._vtype:
             return False
 
-        if variant1._vtype is Scailer_Variant:
+        if variant1._vtype is Scalar_Variant:
             return variant1._vid == variant2._vid
 
         raise Exception('unknown variant type')
@@ -143,7 +143,7 @@ def Enum(cls):
     return cls
 
 
-Scailer_Variant = object()
+Scalar_Variant = object()
 
 
 class Struct_Variant:
