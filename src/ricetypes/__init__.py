@@ -22,6 +22,11 @@ class Option:
             return Option.Some(fun(self.value, *args, **kwargs))
         return self
 
+    def do(self, fun, *args, **kwargs):
+        if self.something:
+            fun(self.value, *args, **kwargs)
+        return self
+
     def __repr__(self):
         if self.something:
             return f'Some({self.value})'
@@ -40,22 +45,29 @@ class Result:
     error: bool
     Exception = Exception
 
-    def Ok(value):
+    def Ok(value, Exception=Exception):
         result = object.__new__(Result)
         result.error = False
         result._value = value
+        result.Exception = Exception
         return result
 
-    def Error(error):
+    def Error(error, Exception=Exception):
         result = object.__new__(Result)
         result.error = True
         result._error = error
+        result.Exception = Exception
         return result
 
     def map(self, fun, *args, **kwargs):
         if self.error:
             return self
         return Result.Ok(fun(self._value, *args, **kwargs))
+
+    def do(self, fun, *args, **kwargs):
+        if not self.error:
+            fun(self._value, *args, **kwargs)
+        return self
 
     def bind(self, fun, *args, **kwargs):
         if self.error:
@@ -67,10 +79,20 @@ class Result:
             return self
         return Result.Error(fun(self._error, *args, **kwargs))
 
+    def doerr(self, fun, *args, **kwargs):
+        if self.error:
+            fun(self._error, *args, **kwargs)
+        return self
+
     def unwrap(self):
         if self.error:
             raise self.Exception(self._error)
         return self._value
+
+    def get_error(self):
+        if self.error:
+            return Option.Some(self._error)
+        return Option.Nothing
 
     def with_exception(self, exp):
         if self.error:
@@ -84,6 +106,12 @@ class Result:
         if self.error:
             return default
         return self._value
+
+    def join(*Rs):
+        for R in Rs:
+            if R.error:
+                return R
+        return Result.Ok(tuple(R._value for R in Rs))
 
     def __repr__(self):
         if self.error:
