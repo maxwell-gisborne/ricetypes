@@ -29,7 +29,7 @@ b = Color.Blue
 g = Color.Green
 
 
-whilte = Color.RGB(100,100,100, alpha=.1)
+white = Color.RGB(100,100,100, alpha=.1)
 
 print(white.alpha)
 print(white._0, white._1, white_2)
